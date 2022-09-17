@@ -24,7 +24,12 @@ export class TiendaService {
     }
    
     async create(tienda: TiendaEntity): Promise<TiendaEntity> {
-        return await this.tiendaRepository.save(tienda);
+        if (tienda.ciudad.length == 3){
+            return await this.tiendaRepository.save(tienda);
+        }else{
+            throw new BusinessLogicException("The producto with the given id was not found", BusinessError.NOT_FOUND);
+        }
+      
     }
  
     async update(id: string, tienda: TiendaEntity): Promise<TiendaEntity> {
@@ -33,8 +38,12 @@ export class TiendaService {
           throw new BusinessLogicException("The tienda with the given id was not found", BusinessError.NOT_FOUND);
        
         tienda.id = id; 
+        if (tienda.ciudad.length == 3){
+            return await this.tiendaRepository.save(tienda);
+        }else{
+            throw new BusinessLogicException("The producto with the given id was not found", BusinessError.NOT_FOUND);
+        }
        
-        return await this.tiendaRepository.save(tienda);
     }
  
     async delete(id: string) {

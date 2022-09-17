@@ -25,7 +25,11 @@ export class ProductoService {
     }
    
     async create(producto: ProductoEntity): Promise<ProductoEntity> {
-        return await this.productoRepository.save(producto);
+        if (producto.tipo == "Perecedero" || producto.tipo == "No perecedero"){
+            return await this.productoRepository.save(producto);
+        }else{
+            throw new BusinessLogicException("The producto with the given id was not found", BusinessError.NOT_FOUND);
+        }
     }
  
     async update(id: string, producto: ProductoEntity): Promise<ProductoEntity> {
@@ -34,8 +38,11 @@ export class ProductoService {
           throw new BusinessLogicException("The producto with the given id was not found", BusinessError.NOT_FOUND);
        
         producto.id = id; 
-       
-        return await this.productoRepository.save(producto);
+        if (producto.tipo == "Perecedero" || producto.tipo == "No perecedero"){
+            return await this.productoRepository.save(producto);
+        }else{
+            throw new BusinessLogicException("The producto with the given id was not found", BusinessError.NOT_FOUND);
+        }
     }
  
     async delete(id: string) {
